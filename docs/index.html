@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>VRChat Event Calendar Assist</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="./main.js"></script>
+  <link rel="stylesheet" href="./style.css">
+
+  <script src='https://cdn.jsdelivr.net/gh/FThompson/FormPersistence.js@2.0.6/form-persistence.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/URIjs@1.16.1/src/URI.min.js"></script>
+  <script type="module">
+    import { UUID } from "https://unpkg.com/uuidjs@^5";
+    window.UUID = UUID;
+  </script>
+</head>
+
+<div class="content-wrapper">
+  <div class="content">
+    <h1>イベントカレンダー登録支援ツール</h1>
+    <div>
+      <form class="pure-form" id="event-form">
+        <fieldset>
+          <du>
+            <dl><label for="event-name">保存済みデータ</label>
+            <select id="stored-events">
+            </select>
+              <input type="button" value="新規" onclick="newForm();" />
+              <input type="button" value="保存" onclick="saveForm();" />
+              <input type="button" value="削除" onclick="deletePreset();" />
+              <input type="text" id="event-uuid" value="" readonly />
+            </dl>
+          </du>
+        </fieldset>
+        <dl>
+          <dt><label for="event-name">イベント名</label></dt>
+          <dd><input type="text" id="event-name" name="event-name"></dd>
+        </dl>
+        <dl>
+          <fieldset>
+            <dt><legend>Android対応可否</legend></dt>
+            <dd>
+              <input type="radio" id="pc" name="event-platform" value="PC" />
+              <label for="pc">PC</label>
+            </dd>
+            <dd>
+              <input type="radio" id="pc_android" name="event-platform" value="PC/android" />
+              <label for="pc_android">PC/android</label>
+            </dd>
+            <dd>
+              <input type="radio" id="android" name="event-platform" value="android only" />
+              <label for="android">android only</label>
+            </dd>
+          </fieldset>
+        </dl>
+        <dl>
+          <dt><label for="event-start">開始時間</label></dt>
+          <dd><input type="time" id="event-start" name="event-start"></dd>
+        </dl>
+        <dl>
+          <dt><label for="event-end">終了時間</label></dt>
+          <dd><input type="time" id="event-end" name="event-end"></dd>
+        </dl>
+        <dl>
+          <dt><label for="event-owner">イベント主催者</label></dt>
+          <dd><input type="text" id="event-owner" name="event-owner"></dd>
+        </dl>
+        <dl>
+          <dt><label for="event-description">イベント内容</label></dt>
+          <dd><input type="text" id="event-description" name="event-description"></dd>
+        </dl>
+        <dl>
+          <fieldset>
+            <dt><legend>イベントジャンル</legend></dt>
+            <dd>
+              <input type="checkbox" id="event-genre-0" name="event-genre" value="アバター試着会" />
+              <label for="event-genre-0">アバター試着会</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-1" name="event-genre" value="改変アバター交流会" />
+              <label for="event-genre-1">改変アバター交流会</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-2" name="event-genre" value="その他交流会" />
+              <label for="event-genre-2">その他交流会</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-3" name="event-genre" value="VR飲み会" />
+              <label for="event-genre-3">VR飲み会</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-4" name="event-genre" value="店舗系イベント" />
+              <label for="event-genre-4">店舗系イベント</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-5" name="event-genre" value="音楽系イベント" />
+              <label for="event-genre-5">音楽系イベント</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-6" name="event-genre" value="学術系イベント" />
+              <label for="event-genre-6">学術系イベント</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-7" name="event-genre" value="ロールプレイ" />
+              <label for="event-genre-7">ロールプレイ</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-8" name="event-genre" value="初心者向けイベント" />
+              <label for="event-genre-8">初心者向けイベント</label>
+            </dd>
+            <dd>
+              <input type="checkbox" id="event-genre-9" name="event-genre" value="定期イベント" />
+              <label for="event-genre-9">定期イベント</label>
+            </dd>
+          </fieldset>
+        </dl>
+        <dl>
+          <dt><label for="event-rule">参加条件（モデル、人数制限など）</label></dt>
+          <dd><input type="text" id="event-rule" name="event-rule"></dd>
+        </dl>
+        <dl>
+          <fieldset>
+            <dt><legend>海外ユーザー向け告知</legend></dt>
+        <dl>
+          <dt><label for="event-howtojoin">参加方法</label></dt>
+          <dd><input type="text" id="event-howtojoin" name="event-howtojoin"></dd>
+        </dl>
+        <dl>
+          <fieldset>
+            <dt><legend>海外ユーザー向け告知</legend></dt>
+        <dl>
+          <dt><label for="event-remark">備考</label></dt>
+          <dd><input type="text" id="event-remark" name="event-remark"></dd>
+        </dl>
+        <dl>
+          <fieldset>
+            <dt><legend>海外ユーザー向け告知</legend></dt>
+        <dl>
+          <dt><label for="event-x-message">X告知文</label></dt>
+          <dd><input type="text" id="event-x-message" name="event-x-message"></dd>
+        </dl>
+        <dl>
+          <fieldset>
+            <dt><legend>海外ユーザー向け告知</legend></dt>
+            <dd>
+              <input type="checkbox" id="event-abroad-message" name="event-abroad-message" value="希望する" />
+              <label for="event-abroad-message">希望する</label>
+           </dd>
+          </fieldset>
+        </dl>
+      </fieldset>
+      <div>
+        <span>毎週</span>
+        <select id="events-day-of-week">
+          <option value="0">日曜日</option>
+          <option value="1">月曜日</option>
+          <option value="2">火曜日</option>
+          <option value="3">水曜日</option>
+          <option value="4">木曜日</option>
+          <option value="5">金曜日</option>
+          <option value="6">土曜日</option>
+        </select>
+        <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
+      </div>
+    </form>
+    <div id="built-links"></div>
+  </div>
+</div>
