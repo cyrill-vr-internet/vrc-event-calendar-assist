@@ -26,8 +26,8 @@
         <fieldset>
           <du>
             <dl><label for="event-name">保存済みデータ</label>
-              <select id="stored-events">
-              </select>
+            <select id="stored-events">
+            </select>
               <input type="button" value="新規" onclick="newForm();" />
               <input type="button" value="保存" onclick="saveForm();" />
               <input type="button" value="削除" onclick="deletePreset();" />
@@ -41,9 +41,7 @@
         </dl>
         <dl>
           <fieldset>
-            <dt>
-              <legend>Android対応可否</legend>
-            </dt>
+            <dt><legend>Android対応可否</legend></dt>
             <dd>
               <input type="radio" id="pc" name="event-platform" value="PC" />
               <label for="pc">PC</label>
@@ -76,9 +74,7 @@
         </dl>
         <dl>
           <fieldset>
-            <dt>
-              <legend>イベントジャンル</legend>
-            </dt>
+            <dt><legend>イベントジャンル</legend></dt>
             <dd>
               <input type="checkbox" id="event-genre-0" name="event-genre" value="アバター試着会" />
               <label for="event-genre-0">アバター試着会</label>
@@ -139,35 +135,33 @@
         </dl>
         <dl>
           <fieldset>
-            <dt>
-              <legend>海外ユーザー向け告知</legend>
-            </dt>
+            <dt><legend>海外ユーザー向け告知</legend></dt>
             <dd>
               <input type="checkbox" id="event-abroad-message" name="event-abroad-message" value="希望する" />
               <label for="event-abroad-message">希望する</label>
-            </dd>
+           </dd>
           </fieldset>
         </dl>
-        </fieldset>
-        <div>
-          <span>毎週</span>
-          <select id="events-day-of-week">
-            <option value="0">日曜日</option>
-            <option value="1">月曜日</option>
-            <option value="2">火曜日</option>
-            <option value="3">水曜日</option>
-            <option value="4">木曜日</option>
-            <option value="5">金曜日</option>
-            <option value="6">土曜日</option>
-          </select>
-          <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
-        </div>
-        <div>
-          <span>毎月</span>
-          <input type="number" id="every_month_day">日
-          <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
-        </div>
-      </form>
-      <div id="built-links"></div>
-    </div>
+      </fieldset>
+      <div>
+        <span>毎週</span>
+        <select id="events-day-of-week">
+          <option value="0">日曜日</option>
+          <option value="1">月曜日</option>
+          <option value="2">火曜日</option>
+          <option value="3">水曜日</option>
+          <option value="4">木曜日</option>
+          <option value="5">金曜日</option>
+          <option value="6">土曜日</option>
+        </select>
+        <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
+      </div>
+      <div>
+        <span>毎月</span>
+        <input type="number" id="every_month_day">日
+        <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
+      </div>
+    </form>
+    <div id="built-links"></div>
   </div>
+</div>
