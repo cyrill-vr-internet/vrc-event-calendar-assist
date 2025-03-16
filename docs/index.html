@@ -142,26 +142,25 @@
            </dd>
           </fieldset>
         </dl>
-      </fieldset>
-      <div>
-        <span>毎週</span>
-        <select id="events-day-of-week">
-          <option value="0">日曜日</option>
-          <option value="1">月曜日</option>
-          <option value="2">火曜日</option>
-          <option value="3">水曜日</option>
-          <option value="4">木曜日</option>
-          <option value="5">金曜日</option>
-          <option value="6">土曜日</option>
-        </select>
-        <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
-      </div>
-      <div>
-        <span>毎月</span>
-        <input type="number" id="every_month_day">日
-        <input type="button" value="今日から4回分生成" onclick="build_weekly_link(4);">
-      </div>
-    </form>
+        <dl>
+          <span>毎週</span>
+          <select id="events-day-of-week" name="events-day-of-week">
+            <option value="0">日曜日</option>
+            <option value="1">月曜日</option>
+            <option value="2">火曜日</option>
+            <option value="3">水曜日</option>
+            <option value="4">木曜日</option>
+            <option value="5">金曜日</option>
+            <option value="6">土曜日</option>
+          </select>
+          <input type="button" value="今日から4回分生成" onclick="updateBuiltLinks(buildLinks(buildWeeklyTargetDateLists(4)));">
+        </dl>
+        <dl>
+          <span>毎月</span>
+          <input type="number" id="every_month_day" name="every_month_day">日
+          <input type="button" value="今日から3回分生成" onclick="updateBuiltLinks(buildLinks(buildMonthlyTargetDateLists(3)));">
+        </dl>
+      </form>
     <div id="built-links"></div>
   </div>
 </div>

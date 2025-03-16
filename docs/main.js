@@ -96,13 +96,19 @@ function getSelectedOptionElement(id) {
 }
 
 function getDayOfWeek(nextWeek, targetDay) {
-  const today = new Date(); // 今日の日付を取得
-  const currentDay = today.getDay(); // 今日の曜日（0:日曜日, 6:土曜日）
+  const today = new Date();
+  const currentDay = today.getDay(); // 0:日曜日
   const dayDifference = (targetDay + 7 - currentDay) % 7; // 次の曜日までの日数を計算
 
-  // 今日が指定の曜日なら今日を返す
+  // 今日が指定の曜日なら今日をセット
   today.setDate(today.getDate() + (dayDifference === 0 ? 0 : dayDifference) + (nextWeek * 7));
+  return today;
+}
 
+function getDayOfMonth(nextMonth, targetDate) {
+  const today = new Date();
+  today.setDate(targetDate);
+  today.setMonth(today.getMonth() + nextMonth);
   return today;
 }
 
@@ -110,10 +116,21 @@ function zeroPadding(NUM, LEN) {
   return (Array(LEN).join('0') + NUM).slice(-LEN);
 }
 
-function build_weekly_link(n) {
-  let links = [];
-  let form_url = "https://docs.google.com/forms/d/e/1FAIpQLSfJlabb7niRTf4rX2Q0wRc3ua9MuOEIKveo7NirR6zuOo6D9A/viewform";
+function buildLinks(lists) {
+  const form_url = "https://docs.google.com/forms/d/e/1FAIpQLSfJlabb7niRTf4rX2Q0wRc3ua9MuOEIKveo7NirR6zuOo6D9A/viewform";
+  let form_params = formParams();
 
+  let links = [];
+  for (let i = 0; i < lists.length; i++) {
+    let params = form_params;
+    params.push(["entry.1310854397", lists[i][0]]); // start
+    params.push(["entry.2042374434", lists[i][1]]); // end
+    links.push(URI(form_url).query(Object.fromEntries(new Map(params))));
+  }
+  return links;
+}
+
+function formParams() {
   let event_platform_selected = getSelectedRadioElement("event-platform");
   let event_genre = document.getElementsByName("event-genre");
   let selected_event_genres = [];
@@ -126,14 +143,13 @@ function build_weekly_link(n) {
   let event_abroad_message_elem = document.getElementById("event-abroad-message");
   let event_abroad_message = event_abroad_message_elem.checked ? event_abroad_message_elem.value : "";
 
-  let form_params = [
+  return [
     ["entry.1319903296", document.getElementById("event-name").value],
     ["entry.1354615990", document.getElementById("event-owner").value],
     ["entry.402615171", document.getElementById("event-description").value],
     ["entry.1470688692", document.getElementById("event-rule").value],
     ["entry.43975396", document.getElementById("event-howtojoin").value],
     ["entry.131997623", document.getElementById("event-remark").value],
-    ["entry.686419094", document.getElementById("event-abroad-message").value],
     ["entry.1957263813", document.getElementById("event-x-message").value],
     ["entry.412548841", event_platform_selected],
     ["entry.1923252134", selected_event_genres],
@@ -141,30 +157,55 @@ function build_weekly_link(n) {
     // --- 固定
     ["entry.1704463647", "イベントを登録する"],
   ];
+}
 
+function buildWeeklyTargetDateLists(n) {
   let today = new Date();
-  document.getElementById("event-start").value
   let event_day_of_week = parseInt(getSelectedOptionElement("events-day-of-week"));
   let event_start = document.getElementById("event-start").value;
   let event_end = document.getElementById("event-end").value;
   // イベント開始時間が現在時刻よりも前の場合来週からにする
-  let initDelta = (event_day_of_week == today.getDay
+  let initDelta = (event_day_of_week == today.getDay()
     && parseInt(event_start.replace(":", "")) <= today.getHours() * 100 + today.getMinutes()) ? 1 : 0;
-
+  let lists = [];
   // n個分の対象日を生成し、同じ時間をセットしてURLを作成
   for (let i = 0; i < n; i++) {
     let targetDate = getDayOfWeek(i + initDelta, parseInt(getSelectedOptionElement("events-day-of-week")));
     let targetDateFormated = `${targetDate.getFullYear()}-${(targetDate.getMonth() + 1).toString().padStart(2, '0')}-${targetDate.getDate().toString().padStart(2, '0')}`
     let startDatetime = `${targetDateFormated} ${event_start}`
     let endDatetime = `${targetDateFormated} ${event_end}`
+    lists.push([startDatetime, endDatetime]);
+  }
+  return lists;
+}
 
-    let params = form_params;
-    params.push(["entry.1310854397", startDatetime]);
-    params.push(["entry.2042374434", endDatetime]);
-
-    links.push(URI(form_url).query(Object.fromEntries(new Map(params))));
+function buildMonthlyTargetDateLists(n) {
+  let today = new Date();
+  let every_month_day = document.getElementById("every_month_day").value;
+  let event_start = document.getElementById("event-start").value;
+  let event_end = document.getElementById("event-end").value;
+  // イベント開始時間が現在時刻よりも前の場合来月からにする
+  let initDelta = 0;
+  if (every_month_day < today.getDate()) {
+    initDelta = 1;
+  } else if (every_month_day == today.getDate()
+    && parseInt(event_start.replace(":", "")) <= today.getHours() * 100 + today.getMinutes()) {
+    initDelta = 1;
   }
 
+  let lists = [];
+  // n個分の対象日を生成し、同じ時間をセットしてURLを作成
+  for (let i = 0; i < n; i++) {
+    let targetDate = getDayOfMonth(i + initDelta, every_month_day);
+    let targetDateFormated = `${targetDate.getFullYear()}-${(targetDate.getMonth() + 1).toString().padStart(2, '0')}-${targetDate.getDate().toString().padStart(2, '0')}`
+    let startDatetime = `${targetDateFormated} ${event_start}`
+    let endDatetime = `${targetDateFormated} ${event_end}`
+    lists.push([startDatetime, endDatetime]);
+  }
+  return lists;
+}
+
+function updateBuiltLinks(links) {
   document.getElementById("built-links").innerHTML = "";
   for (let i = 0; i < links.length; i++) {
     let div = document.createElement("div");
