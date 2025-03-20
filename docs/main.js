@@ -140,17 +140,17 @@ function formParams() {
     }
   }
 
-  let event_abroad_message_elem = document.getElementById("event-abroad-message");
+  let event_abroad_message_elem = document.getElementById("event-abroad-message-0");
   let event_abroad_message = event_abroad_message_elem.checked ? event_abroad_message_elem.value : "";
 
   return [
     ["entry.1319903296", document.getElementById("event-name").value],
     ["entry.1354615990", document.getElementById("event-owner").value],
-    ["entry.402615171", document.getElementById("event-description").value],
-    ["entry.1470688692", document.getElementById("event-rule").value],
+    ["entry.402615171", document.getElementById("event-description").innerText],
+    ["entry.1470688692", document.getElementById("event-rule").innerText],
     ["entry.43975396", document.getElementById("event-howtojoin").value],
     ["entry.131997623", document.getElementById("event-remark").value],
-    ["entry.1957263813", document.getElementById("event-x-message").value],
+    ["entry.1957263813", document.getElementById("event-x-message").innerText],
     ["entry.412548841", event_platform_selected],
     ["entry.1923252134", selected_event_genres],
     ["entry.686419094", event_abroad_message],

@@ -34,17 +34,34 @@ ol {
 }
 
 textarea {
-    font-size: 10px;
-    width: 100%;
+    font-size: 18px;
+    width: 60%;
     height: 200px;
 }
 
-input.action-button {
-    width: 100%;
+legend {
+    font-size: 18px;
 }
 
-input#no-tags {
-    margin: 2px;
+label {
+    font-size: 18px;
+}
+
+#event-uuid {
+    visibility: hidden;
+}
+
+input[type=number] {
+    width: 80px;
+}
+
+input[type=time] {
+    font-size: 18px;
+}
+
+input[type=text] {
+    font-size: 18px;
+    width: 60%;
 }
 
 a {
