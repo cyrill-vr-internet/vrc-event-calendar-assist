@@ -10,7 +10,8 @@
     margin: 10px 0;
 }
 
-select {
+select#events-day-of-week,
+select#stored-events {
     padding: 0;
 }
 
