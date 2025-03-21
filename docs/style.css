@@ -53,7 +53,7 @@ label {
 }
 
 #event-uuid {
-    visibility: hidden;
+    display: none;
 }
 
 input[type=number] {

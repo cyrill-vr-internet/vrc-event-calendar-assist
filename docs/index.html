@@ -12,6 +12,7 @@
 
   <script src='https://cdn.jsdelivr.net/gh/FThompson/FormPersistence.js@2.0.6/form-persistence.min.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/URIjs@1.16.1/src/URI.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
   <script type="module">
     import { UUID } from "https://unpkg.com/uuidjs@^5";
     window.UUID = UUID;
@@ -26,12 +27,14 @@
         <fieldset>
           <du>
             <dl><label for="event-name">保存済みデータ</label>
-            <select id="stored-events">
-            </select>
+              <select id="stored-events">
+              </select>
               <input type="button" value="新規" onclick="newForm();" />
               <input type="button" value="保存" onclick="saveForm();" />
               <input type="button" value="削除" onclick="deletePreset();" />
               <input type="text" id="event-uuid" value="" readonly />
+              <input type="button" value="Export" onclick="generateURL();">
+              <input type="text" id="export-url" value="" readonly />
             </dl>
           </du>
         </fieldset>
@@ -41,7 +44,9 @@
         </dl>
         <dl>
           <fieldset>
-            <dt><legend>Android対応可否</legend></dt>
+            <dt>
+              <legend>Android対応可否</legend>
+            </dt>
             <dd>
               <input type="radio" id="pc" name="event-platform" value="PC" />
               <label for="pc">PC</label>
@@ -74,7 +79,9 @@
         </dl>
         <dl>
           <fieldset>
-            <dt><legend>イベントジャンル</legend></dt>
+            <dt>
+              <legend>イベントジャンル</legend>
+            </dt>
             <dd>
               <input type="checkbox" id="event-genre-0" name="event-genre" value="アバター試着会" />
               <label for="event-genre-0">アバター試着会</label>
@@ -135,7 +142,9 @@
         </dl>
         <dl>
           <fieldset>
-            <dt><legend>海外ユーザー向け告知</legend></dt>
+            <dt>
+              <legend>海外ユーザー向け告知</legend>
+            </dt>
             <dd>
               <input type="checkbox" id="event-abroad-message-0" name="event-abroad-message" value="希望する" />
               <label for="event-abroad-message-0">希望する</label>
@@ -158,9 +167,10 @@
         <dl>
           <span>毎月</span>
           <input type="number" id="every_month_day" name="every_month_day">日
-          <input type="button" value="今日から3回分生成" onclick="updateBuiltLinks(buildLinks(buildMonthlyTargetDateLists(3)));">
+          <input type="button" value="今日から3回分生成"
+            onclick="updateBuiltLinks(buildLinks(buildMonthlyTargetDateLists(3)));">
         </dl>
       </form>
-    <div id="built-links"></div>
+      <div id="built-links"></div>
+    </div>
   </div>
-</div>

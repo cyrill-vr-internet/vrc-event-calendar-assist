@@ -2,7 +2,53 @@ window.addEventListener("load", (event) => {
   reloadPreset();
 
   FormPersistence.load(document.getElementById('event-form'), { uuid: document.getElementById("event-uuid").value });
+
+  let params = new URLSearchParams(document.location.search);
+  if (params.get("json")) {
+    newForm();
+    importData(params.get("json"));
+  }
 });
+
+function generateURL() {
+  let url = URI(location.href);
+  params = formParams();
+  params.push(["event-start", document.getElementById("event-start").value]);
+  params.push(["event-end", document.getElementById("event-end").value]);
+
+  document.getElementById("export-url").value = url.query({ json: JSON.stringify(params) }).toString();
+}
+
+function importData(json) {
+  params = new Map(JSON.parse(json));
+
+  map = [
+    ["entry.1319903296", "event-name"],
+    ["entry.1354615990", "event-owner"],
+    ["entry.402615171", "event-description"],
+    ["entry.1470688692", "event-rule"],
+    ["entry.43975396", "event-howtojoin"],
+    ["entry.131997623", "event-remark"],
+    ["entry.1957263813", "event-x-message"],
+    ["event-start", "event-start"],
+    ["event-end", "event-end"],
+  ]
+  for (let i = 0; i < map.length; i++) {
+    document.getElementById(map[i][1]).value = params.get(map[i][0]);
+  }
+  setSelectedRadioElement("event-platform", params.get("entry.412548841"));
+
+  let event_genre = document.getElementsByName("event-genre");
+  let selected_event_genres = params.get("entry.1923252134");
+  for (let i = 0; i < event_genre.length; i++) {
+    if (selected_event_genres.includes(event_genre[i].value)) {
+      event_genre[i].checked = true;
+    }
+  }
+  if (params.get("entry.686419094") != "") {
+    document.getElementById("event-abroad-message-0").checked = true;
+  }
+}
 
 function reloadPreset() {
   const se = localStorage.getItem("vrc_event_calendar_events");
@@ -78,6 +124,15 @@ function deletePreset() {
   let options = document.getElementById("stored-events").options
   options[options.length - 1].selected = true;
   FormPersistence.load(document.getElementById('event-form'), { uuid: document.getElementById("event-uuid").value });
+}
+
+function setSelectedRadioElement(name, value) {
+  let elements = document.getElementsByName(name);
+  for (let i = 0; i < elements.length; i++) {
+    if (elements.item(i).value == value) {
+      elements.item(i).checked = true;
+    }
+  }
 }
 
 function getSelectedRadioElement(name) {
